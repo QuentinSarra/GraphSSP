@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 import static fr.istic.mob.graphssp.Graph.getScreenHeight;
 import static fr.istic.mob.graphssp.Graph.getScreenWidth;
+import static java.lang.Math.atan;
+import static java.lang.Math.toDegrees;
 
 public class DrawableGraph extends Drawable {
     Graph graph;
@@ -36,7 +38,7 @@ public class DrawableGraph extends Drawable {
         Paint paintLblArc = new TextPaint();
         paintLbl.setColor(Color.WHITE);
         paintLbl.setTextAlign(Paint.Align.CENTER);
-        paintLbl.setTextSize(25);
+        paintLbl.setTextSize(40);
         paintLblArc.setColor(Color.BLACK);
         paintLblArc.setTextAlign(Paint.Align.CENTER);
 
@@ -52,8 +54,6 @@ public class DrawableGraph extends Drawable {
             paintArc.setColor(a.getColor());
             paintArc.setStyle(Paint.Style.STROKE);
             paintLblArc.setTextSize(a.getLargeurLabel());
-            //paintLblArc.
-
             Path newPath = new Path();
             newPath.moveTo(a.getNodeOrigine().getX(),a.getNodeOrigine().getY());
             newPath.lineTo(a.getNodeDest().getX(),a.getNodeDest().getY());
@@ -65,28 +65,39 @@ public class DrawableGraph extends Drawable {
             pm.getPosTan(pm.getLength()/2,middlePoint,tangent);
             a.setMiddlePoint(middlePoint);
             a.setTangent(tangent);
-            Log.d("DEBUG","tangente de l'arc '"+ a.getLabel() + "' : x =" + tangent[0] + "; y = " +tangent[1] );
+            //Log.d("DEBUG","tangente de l'arc '"+ a.getLabel() + "' : x = " + tangent[0] + "; y = " +tangent[1] );
 
 
             canvas.save();
-            float x = a.getMiddlePoint()[0]+10*tangent[0];
-            float y = a.getMiddlePoint()[1]+10*tangent[1];
-
-            float nx = (a.getMiddlePoint()[0]+10*tangent[0]*width)/totalSize;
-            float ny = (a.getMiddlePoint()[1]+10*tangent[1]*height)/totalSize;
+            float x = a.getMiddlePoint()[0];
+            float y = a.getMiddlePoint()[1];
+            float nx = tangent[0];
+            float ny = tangent[1];
             float degrees = ny/nx;
-            //double degs = toDegrees(atan(degrees));
-            canvas.rotate((float)45,x,y);
-            canvas.drawText(a.getLabel(),x,y,paintLblArc);
+            double degs = toDegrees(atan(degrees));
+
+            canvas.rotate((float)degs,x,y);
+            if (ny > 0){
+                canvas.drawText(a.getLabel(),x,y-25,paintLblArc);
+            }
+            else if (ny <= 0){
+                canvas.drawText(a.getLabel(),x,y+45,paintLblArc);
+            }
             canvas.restore();
-
-
-
-
-
         }
 
-
+        Path path;
+        Paint paintTemp = new Paint();
+        paintTemp.setColor(Color.BLACK);
+        paintTemp.setStrokeWidth(5);
+        paintTemp.setStyle(Paint.Style.STROKE);
+        ArcTemp arctemp = graph.getArcTemp();
+        if(arctemp != null){
+            path = new Path();
+            path.moveTo(arctemp.getNodeOrigine().getX(),arctemp.getNodeOrigine().getY());
+            path.lineTo(arctemp.getNodeX(),arctemp.getNodeY());
+            canvas.drawPath(path,paintTemp);
+        }
 
         for(Node n : graph.getNodes()) {
             float tailleLbl = paintLbl.measureText(n.getLabel());

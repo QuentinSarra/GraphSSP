@@ -23,11 +23,11 @@ public class MainActivity extends AppCompatActivity {
     private static Graph firstGraph;
     private ImageView view;
     private static DrawableGraph graph;
-    private Node affectedNode;
+    private Node affectedNode,startingNode, endNode;
     private float lastTouchDownX;
     private float lastTouchDownY;
     private boolean creationNodeMode = false, creationArcMode = false, editMode = true, movingMode = false;
-    private boolean canMove=true;
+    private boolean canMove=true, startedNode=false;
     private AlertDialog alertDialog;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -54,20 +54,61 @@ public class MainActivity extends AppCompatActivity {
                 if (movingMode) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            if(!isOnNode()){
+                            if (!isOnNode()) {
                                 canMove = false;
-                            }else{
+                            } else {
                                 return false;
                             }
+                            break;
                         case MotionEvent.ACTION_MOVE:
-                            if(canMove){
+                            if (canMove) {
                                 affectedNode.move(lastTouchDownX, lastTouchDownY);
                                 updateView();
-                            }else{
+                            } else {
                                 return false;
                             }
+                            break;
                         case MotionEvent.ACTION_UP:
                             canMove = true;
+                            break;
+                        default:
+                            return false;
+                    }
+                }
+                else if(creationArcMode){
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            if (isOnNode() && creationArcMode && !startedNode) {
+                                startingNode = affectedNode;
+                                firstGraph.initArcTemp(lastTouchDownX, lastTouchDownY);
+                                updateView();
+                                startedNode = true;
+                            }
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            if (firstGraph.getArcTemp() != null) {
+                                firstGraph.setArcTemp(lastTouchDownX, lastTouchDownY);
+                            }
+                            updateView();
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            if (creationArcMode) {
+                                if (isOnNode() && startedNode) {
+                                    endNode = affectedNode;
+                                    firstGraph.addArc(new ArcFinal(startingNode, endNode, "1"));
+                                    startedNode = false;
+                                    firstGraph.removeArcTemp();
+                                    updateView();
+                                } else {
+                                    startingNode = null;
+                                    startedNode = false;
+                                    firstGraph.removeArcTemp();
+                                    updateView();
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 return false;
@@ -81,8 +122,8 @@ public class MainActivity extends AppCompatActivity {
                 if (creationNodeMode) {
                     final EditText input = new EditText(MainActivity.this);
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-                    alertDialogBuilder.setTitle("Create a  new node");
-                    alertDialogBuilder.setMessage("Enter the node label").setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    alertDialogBuilder.setTitle(R.string.alertCreationNode);
+                    alertDialogBuilder.setMessage(R.string.alertCreationNodeMessage).setPositiveButton(R.string.alertCreationNodeAdd, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             String label = input.getText().toString();
                             Node node = new Node(lastTouchDownX, lastTouchDownY, (float) 40, Color.BLACK, label);
@@ -183,10 +224,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, this.getText(R.string.edit_label__node), Toast.LENGTH_LONG).show();
                 final EditText changeLabel = new EditText(MainActivity.this);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-                alertDialogBuilder.setTitle("");
+                alertDialogBuilder.setTitle(R.string.alertEditLabelNode);
                 alertDialogBuilder
-                        .setMessage("Enter the new node label")
-                        .setPositiveButton("Change",new DialogInterface.OnClickListener() {
+                        .setMessage(R.string.alertEditLabelNodeMessage)
+                        .setPositiveButton(R.string.alertEditLabelNodeChange,new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 String label = changeLabel.getText().toString();
 
@@ -208,9 +249,9 @@ public class MainActivity extends AppCompatActivity {
                 inputTaille.setInputType(InputType.TYPE_CLASS_NUMBER);
                 AlertDialog.Builder alertDialogBuilderTaille = new AlertDialog.Builder(
                         this);
-                alertDialogBuilderTaille.setTitle("Enter the new size");
+                alertDialogBuilderTaille.setTitle(R.string.alertEditSizeNode);
                 alertDialogBuilderTaille
-                        .setPositiveButton("Edit",new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.alertEditSizeNodeEdit,new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 // if this button is clicked, close
                                 // current activity

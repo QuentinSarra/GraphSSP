@@ -99,6 +99,10 @@ public class Graph {
         arcs.remove(a);
     }
 
+    public void removeArcTemp() {
+        arcTemp=null;
+    }
+
     public static int getScreenWidth() {
         return Resources.getSystem().getDisplayMetrics().widthPixels;
     }

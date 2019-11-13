@@ -22,4 +22,12 @@
     <string name="color_black">Black</string>
     <string name="move">Move Node</string>
     <string name="move_node_toast">You can move nodes</string>
+    <string name="alertCreationNode">Create a new node</string>
+    <string name="alertCreationNodeMessage">Enter the node label</string>
+    <string name="alertCreationNodeAdd">Add</string>
+    <string name="alertEditLabelNode">Change the node label</string>
+    <string name="alertEditLabelNodeMessage">Enter the new node label</string>
+    <string name="alertEditLabelNodeChange">Change</string>
+    <string name="alertEditSizeNode">Enter the new size</string>
+    <string name="alertEditSizeNodeEdit">Edit</string>
 </resources>
