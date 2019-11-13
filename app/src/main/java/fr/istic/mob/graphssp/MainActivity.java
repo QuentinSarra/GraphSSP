@@ -45,7 +45,9 @@ public class MainActivity extends AppCompatActivity {
         view.setImageDrawable(graph);
 
         view.setOnTouchListener(new View.OnTouchListener() {
-            Node nodedeb;
+            Node nodeDeb;
+            Node nodeDest;
+            boolean startedNode = false;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 lastTouchDownX = event.getX();
@@ -57,13 +59,28 @@ public class MainActivity extends AppCompatActivity {
                                 affectedNode.move(lastTouchDownX, lastTouchDownY);
                                 updateView();
                             } else if(creationArcMode){
-                                firstGraph.setArcTemp(lastTouchDownX,lastTouchDownY);
+                                if(firstGraph.getArcTemp() != null) {
+                                    firstGraph.setArcTemp(lastTouchDownX, lastTouchDownY);
+                                }
                                 updateView();
                             }
                         case MotionEvent.ACTION_DOWN :
                             if( isOnNode() && creationArcMode){
-                                nodedeb = affectedNode;
+                                nodeDeb = affectedNode;
                                 firstGraph.initArcTemp(lastTouchDownX,lastTouchDownY);
+                                updateView();
+                                startedNode = true;
+                            }
+                        case MotionEvent.ACTION_UP :
+                            if(creationArcMode){
+                                if(isOnNode() && startedNode) {
+                                    firstGraph.addArc(new ArcFinal(nodeDeb,nodeDest,""));
+                                    startedNode = false;
+                                }else {
+                                    nodeDeb=null;
+                                    startedNode = false;
+                                }
+                                firstGraph.removeArcTemp();
                                 updateView();
                             }
                     }
@@ -135,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.move:
                 Toast.makeText( this, this.getText(R.string.move_node_toast), Toast.LENGTH_LONG).show();
                 creationNodeMode=false;
-                creationArcMode=true;
+                creationArcMode=false;
                 movingMode =true;
                 editMode=false;
                 updateView();
