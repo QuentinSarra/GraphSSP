@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Graph2</string>
+    <string name="app_name">GraphSSP</string>
     <string name="reset">Reset</string>
     <string name="add_node">Add Node</string>
     <string name="add_path">Add Path</string>
@@ -20,4 +20,6 @@
     <string name="color_cyan">Cyan</string>
     <string name="color_magenta">Magenta</string>
     <string name="color_black">Black</string>
+    <string name="move">Move Node</string>
+    <string name="move_node_toast">You can move nodes</string>
 </resources>

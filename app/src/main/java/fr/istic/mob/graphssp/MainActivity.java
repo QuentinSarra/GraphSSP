@@ -18,11 +18,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-
-
-
-
-
 public class MainActivity extends AppCompatActivity {
 
     private static Graph firstGraph;
@@ -31,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private Node affectedNode;
     private float lastTouchDownX;
     private float lastTouchDownY;
-    private boolean creationNodeMode = false, creationArcMode = false, editMode = true, isMoving = false;
+    private boolean creationNodeMode = false, creationArcMode = false, editMode = true, movingMode = false;
     private AlertDialog alertDialog;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -55,17 +50,13 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 lastTouchDownX = event.getX();
                 lastTouchDownY = event.getY();
-                switch (event.getAction()){
-                    case MotionEvent.ACTION_MOVE :
-                        if(isOnNode() && editMode){
-                            affectedNode.deplace(lastTouchDownX,lastTouchDownY);
-                            isMoving = true;
+                if (movingMode && isOnNode()) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_MOVE:
+                            affectedNode.move(lastTouchDownX, lastTouchDownY);
                             updateView();
-                        }
-
-
+                    }
                 }
-                isMoving=false;
                 return false;
             }
         });
@@ -119,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText( this, this.getText(R.string.add_node_toast), Toast.LENGTH_LONG).show();
                 creationNodeMode=true;
                 creationArcMode=false;
+                movingMode =false;
                 editMode=false;
                 updateView();
                 return true;
@@ -126,6 +118,15 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText( this, this.getText(R.string.add_path_toast), Toast.LENGTH_LONG).show();
                 creationNodeMode=false;
                 creationArcMode=true;
+                movingMode =false;
+                editMode=false;
+                updateView();
+                return true;
+            case R.id.move:
+                Toast.makeText( this, this.getText(R.string.move_node_toast), Toast.LENGTH_LONG).show();
+                creationNodeMode=false;
+                creationArcMode=true;
+                movingMode =true;
                 editMode=false;
                 updateView();
                 return true;
@@ -133,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText( this, this.getText(R.string.edit_toast), Toast.LENGTH_LONG).show();
                 creationNodeMode=false;
                 creationArcMode=false;
+                movingMode =false;
                 editMode=true;
                 updateView();
                 return true;
@@ -145,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if(editMode) {
-            if (this.isOnNode() && !isMoving) {
+            if (this.isOnNode()) {
                 super.onCreateContextMenu(menu, v, menuInfo);
                 getMenuInflater().inflate(R.menu.node_menu, menu);
                 menu.setHeaderTitle("Edit Node");

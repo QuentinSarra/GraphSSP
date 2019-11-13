@@ -20,7 +20,7 @@ public class Node extends RectF{
         this.label = label;
     }
 
-    public void deplace(float x, float y)
+    public void move(float x, float y)
     {
         this.x = x;
         this.y = y;
@@ -60,6 +60,7 @@ public class Node extends RectF{
     }
 
     public void setRayon (float rayon){
+        this.rayon = rayon;
         super.set(x - rayon, y - rayon, x + rayon, y + rayon);
     }
 }
