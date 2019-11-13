@@ -86,7 +86,18 @@ public class DrawableGraph extends Drawable {
 
         }
 
-
+        Path path;
+        Paint paintTemp = new Paint();
+        paintTemp.setColor(Color.BLACK);
+        paintTemp.setStrokeWidth(5);
+        paintTemp.setStyle(Paint.Style.STROKE);
+        ArcTemp arctemp = graph.getArcTemp();
+        if(arctemp != null){
+            path = new Path();
+            path.moveTo(arctemp.getNodeOrigine().getX(),arctemp.getNodeOrigine().getY());
+            path.lineTo(arctemp.getNodeX(),arctemp.getNodeY());
+            canvas.drawPath(path,paintTemp);
+        }
 
         for(Node n : graph.getNodes()) {
             float tailleLbl = paintLbl.measureText(n.getLabel());

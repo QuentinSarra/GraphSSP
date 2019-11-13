@@ -50,13 +50,23 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 lastTouchDownX = event.getX();
                 lastTouchDownY = event.getY();
-                if (movingMode && isOnNode()) {
+
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_MOVE:
-                            affectedNode.move(lastTouchDownX, lastTouchDownY);
-                            updateView();
+                            if (movingMode && isOnNode()) {
+                                affectedNode.move(lastTouchDownX, lastTouchDownY);
+                                updateView();
+                            } else if(creationArcMode){
+                                firstGraph.setArcTemp(lastTouchDownX,lastTouchDownY);
+                                updateView();
+                            }
+                        case MotionEvent.ACTION_DOWN :
+                            if( isOnNode() && creationArcMode){
+                                nodedeb = affectedNode;
+                                firstGraph.initArcTemp(lastTouchDownX,lastTouchDownY);
+                                updateView();
+                            }
                     }
-                }
                 return false;
             }
         });
