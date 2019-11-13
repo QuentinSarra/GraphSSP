@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/delete_node"
+        android:title="@string/delete_node" />
+    <item
+        android:id="@+id/edit_label__node"
+        android:title="@string/edit_label__node" >
+    </item>
+    <item
+        android:id="@+id/edit_size_node"
+        android:title="@string/edit_size_node" />
+    <item
+        android:id="@+id/edit_color_node"
+        android:title="@string/edit_color_node" >
+        <menu>
+            <item
+                android:id="@+id/edit_color_red"
+                android:title="@string/color_red" />
+            <item
+                android:id="@+id/edit_color_green"
+                android:title="@string/color_green" />
+            <item
+                android:id="@+id/edit_color_blue"
+                android:title="@string/color_blue" />
+            <item
+                android:id="@+id/edit_color_orange"
+                android:title="@string/color_orange" />
+            <item
+                android:id="@+id/edit_color_cyan"
+                android:title="@string/color_cyan" />
+            <item
+                android:id="@+id/edit_color_magenta"
+                android:title="@string/color_magenta" />
+            <item
+                android:id="@+id/edit_color_black"
+                android:title="@string/color_black" />
+        </menu>
+    </item>
+</menu>
