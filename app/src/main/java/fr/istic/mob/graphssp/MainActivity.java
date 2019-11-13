@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private float lastTouchDownX;
     private float lastTouchDownY;
     private boolean creationNodeMode = false, creationArcMode = false, editMode = true, movingMode = false;
+    private boolean canMove=true;
     private AlertDialog alertDialog;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -50,11 +51,23 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 lastTouchDownX = event.getX();
                 lastTouchDownY = event.getY();
-                if (movingMode && isOnNode()) {
+                if (movingMode) {
                     switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            if(!isOnNode()){
+                                canMove = false;
+                            }else{
+                                return false;
+                            }
                         case MotionEvent.ACTION_MOVE:
-                            affectedNode.move(lastTouchDownX, lastTouchDownY);
-                            updateView();
+                            if(canMove){
+                                affectedNode.move(lastTouchDownX, lastTouchDownY);
+                                updateView();
+                            }else{
+                                return false;
+                            }
+                        case MotionEvent.ACTION_UP:
+                            canMove = true;
                     }
                 }
                 return false;
