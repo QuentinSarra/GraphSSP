@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
         view.setImageDrawable(graph);
 
         view.setOnTouchListener(new View.OnTouchListener() {
-            Node nodedeb;
+            Node startingNode;
+            Node nodeDest;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 lastTouchDownX = event.getX();
@@ -86,21 +87,14 @@ public class MainActivity extends AppCompatActivity {
                                 startedNode = true;
                             }
                             break;
-<<<<<<< HEAD
                         case MotionEvent.ACTION_MOVE:
                             if (firstGraph.getArcTemp() != null) {
                                 firstGraph.setArcTemp(lastTouchDownX, lastTouchDownY);
                             }
                             updateView();
                             break;
-                        case MotionEvent.ACTION_UP:
-                            if (creationArcMode) {
-                                if (isOnNode() && startedNode) {
-                                    endNode = affectedNode;
-                                    firstGraph.addArc(new ArcFinal(startingNode, endNode, "1"));
-=======
+
                         case MotionEvent.ACTION_UP :
-                            if(creationArcMode){
                                 if(isOnNode() && startedNode) {
                                     nodeDest = affectedNode;
                                     final EditText input = new EditText(MainActivity.this);
@@ -109,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                                     alertDialogBuilder.setMessage("Enter the Arc label").setPositiveButton("Add", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             String label = input.getText().toString();
-                                            ArcFinal newArc = new ArcFinal(nodeDeb,nodeDest,label);
+                                            ArcFinal newArc = new ArcFinal(startingNode,nodeDest,label);
                                             if (label.length() > 0) {
                                                 firstGraph.addArc(newArc);
                                                 updateView();
@@ -122,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
->>>>>>> b7b461f2457eaffdb9a871930dddb56a664c931d
                                     startedNode = false;
                                     firstGraph.removeArcTemp();
                                     updateView();
@@ -132,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                                     firstGraph.removeArcTemp();
                                     updateView();
                                 }
-                            }
+
                             break;
                         default:
                             break;
