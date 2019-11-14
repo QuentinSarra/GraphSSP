@@ -89,7 +89,9 @@ public class Graph {
         arcTemp = new ArcTemp(checkNode(x, y));
     }
 
-    public void removeArcTemp(){ arcTemp=null; }
+    public void removeArcTemp(){
+        arcTemp=null;
+    }
 
     public ArrayList<ArcFinal> getArcs(){return arcs; }
 

@@ -64,25 +64,32 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 updateView();
                             }
+                            break;
                         case MotionEvent.ACTION_DOWN :
-                            if( isOnNode() && creationArcMode){
+                            if(isOnNode() && creationArcMode && !startedNode){
                                 nodeDeb = affectedNode;
                                 firstGraph.initArcTemp(lastTouchDownX,lastTouchDownY);
                                 updateView();
                                 startedNode = true;
                             }
+                            break;
                         case MotionEvent.ACTION_UP :
                             if(creationArcMode){
                                 if(isOnNode() && startedNode) {
-                                    firstGraph.addArc(new ArcFinal(nodeDeb,nodeDest,""));
+                                    nodeDest = affectedNode;
+                                    firstGraph.addArc(new ArcFinal(nodeDeb,nodeDest,"1"));
                                     startedNode = false;
+                                    firstGraph.removeArcTemp();
+                                    updateView();
                                 }else {
-                                    nodeDeb=null;
+                                    nodeDeb = null;
                                     startedNode = false;
+                                    firstGraph.removeArcTemp();
+                                    updateView();
                                 }
-                                firstGraph.removeArcTemp();
-                                updateView();
                             }
+                            break;
+                        default: break;
                     }
                 return false;
             }
