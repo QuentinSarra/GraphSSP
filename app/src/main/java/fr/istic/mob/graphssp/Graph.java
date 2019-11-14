@@ -3,6 +3,7 @@ package fr.istic.mob.graphssp;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.RectF;
 import android.util.DisplayMetrics;
 import android.widget.ImageView;
 
@@ -89,9 +90,6 @@ public class Graph {
         arcTemp = new ArcTemp(checkNode(x, y));
     }
 
-    public void removeArcTemp(){
-        arcTemp=null;
-    }
 
     public ArrayList<ArcFinal> getArcs(){return arcs; }
 
@@ -101,6 +99,14 @@ public class Graph {
 
     public void removeArc(ArcFinal a) {
         arcs.remove(a);
+    }
+
+    public void changeArcColor(int color, ArcFinal a){
+        a.setColor(color);
+    }
+
+    public void changeArcLabel(String label, ArcFinal a){
+        a.setLabel(label);
     }
 
     public void removeArcTemp() {
@@ -115,5 +121,17 @@ public class Graph {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
+    public ArcFinal getArc(float x, float y){
+        RectF r;
+        for (ArcFinal a : arcs){
+            float xMil = a.getMiddlePoint()[0];
+            float yMil = a.getMiddlePoint()[1];
 
+            r = new RectF(xMil-50,yMil-50,xMil+50,yMil+50);
+            if(r.contains(x,y)){
+                return a;
+            }
+        }
+        return null;
+    }
 }

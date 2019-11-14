@@ -26,8 +26,24 @@
     <string name="alertCreationNodeMessage">Enter the node label</string>
     <string name="alertCreationNodeAdd">Add</string>
     <string name="alertEditLabelNode">Change the node label</string>
+    <string name="alertEditLabelArc">Change the path label</string>
     <string name="alertEditLabelNodeMessage">Enter the new node label</string>
+    <string name="alertEditLabelArcMessage">Enter the new arc label</string>
     <string name="alertEditLabelNodeChange">Change</string>
+    <string name="alertEditLabelArcChange">Change</string>
     <string name="alertEditSizeNode">Enter the new size</string>
+    <string name="alertEditSizeArc">Enter the new size</string>
     <string name="alertEditSizeNodeEdit">Edit</string>
+    <string name="alertEditSizeArcEdit">Edit</string>
+    <string name="delete_arc">Delete</string>
+    <string name="edit_label__arc">Edit Label</string>
+    <string name="edit_size_arc">Edit Size</string>
+    <string name="edit_color_arc">Edit Color</string>
+    <string name="color_arc_red">Red</string>
+    <string name="color_arc_green">Green</string>
+    <string name="color_arc_blue">Blue</string>
+    <string name="color_arc_orange">Orange</string>
+    <string name="color_arc_cyan">Cyan</string>
+    <string name="color_arc_magenta">Magenta</string>
+    <string name="color_arc_black">Black</string>
 </resources>
