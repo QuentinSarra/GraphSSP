@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/delete_arc"
+        android:title="@string/delete_arc" />
+    <item
+        android:id="@+id/edit_label__arc"
+        android:title="@string/edit_label__arc" >
+    </item>
+    <item
+        android:id="@+id/edit_size_arc"
+        android:title="@string/edit_size_arc" />
+    <item
+        android:id="@+id/edit_color_arc"
+        android:title="@string/edit_color_arc" >
+        <menu>
+            <item
+                android:id="@+id/edit_color_arc_red"
+                android:title="@string/color_red" />
+            <item
+                android:id="@+id/edit_color_arc_green"
+                android:title="@string/color_green" />
+            <item
+                android:id="@+id/edit_color_arc_blue"
+                android:title="@string/color_blue" />
+            <item
+                android:id="@+id/edit_color_arc_orange"
+                android:title="@string/color_orange" />
+            <item
+                android:id="@+id/edit_color_arc_cyan"
+                android:title="@string/color_cyan" />
+            <item
+                android:id="@+id/edit_color_arc_magenta"
+                android:title="@string/color_magenta" />
+            <item
+                android:id="@+id/edit_color_arc_black"
+                android:title="@string/color_black" />
+        </menu>
+    </item>
+</menu>

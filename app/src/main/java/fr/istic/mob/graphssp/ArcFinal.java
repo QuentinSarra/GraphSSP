@@ -18,7 +18,7 @@ public class ArcFinal extends Arc {
         this.n2 = NoeudDestination;
         this.color = Color.BLACK;
         this.width = 5;
-        this.largeurLabel = 25;
+        this.largeurLabel = 35;
         this.label = label;
     }
 

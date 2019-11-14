@@ -42,11 +42,6 @@ public class DrawableGraph extends Drawable {
         paintLblArc.setColor(Color.BLACK);
         paintLblArc.setTextAlign(Paint.Align.CENTER);
 
-        int height = getScreenHeight();
-        int width = getScreenWidth();
-        int totalSize = height + width;
-
-
 
         for (ArcFinal a : graph.getArcs()){
             Paint paintArc = new Paint();

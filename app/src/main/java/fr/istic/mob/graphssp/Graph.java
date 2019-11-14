@@ -36,7 +36,6 @@ public class Graph {
         nodes.add(new Node((float)width/8,(float)height/8,(float)(width+height)/60, Color.BLACK,"1"));
         nodes.add(new Node((float)width/8,(float)height/div,(float)(width+height)/60, Color.BLACK,"7"));
 
-        arcs.add(new ArcFinal(nodes.get(3), nodes.get(7),"TestArc"));
     }
 
     public ArrayList<Node> getNodes(){

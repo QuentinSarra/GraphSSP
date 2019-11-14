@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean creationNodeMode = false, creationArcMode = false, editMode = true, movingMode = false;
     private boolean canMove=true, startedNode=false;
     private AlertDialog alertDialog;
+    private String nameOfNode, nameOfArc;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -47,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
         view.setImageDrawable(graph);
 
         view.setOnTouchListener(new View.OnTouchListener() {
-            Node startingNode;
-            Node nodeDest;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 lastTouchDownX = event.getX();
@@ -93,29 +92,23 @@ public class MainActivity extends AppCompatActivity {
                             }
                             updateView();
                             break;
-
                         case MotionEvent.ACTION_UP :
                                 if(isOnNode() && startedNode) {
-                                    nodeDest = affectedNode;
+                                    endNode = affectedNode;
                                     final EditText input = new EditText(MainActivity.this);
                                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-                                    alertDialogBuilder.setTitle("Create a  new Arc");
-                                    alertDialogBuilder.setMessage("Enter the Arc label").setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                                    alertDialogBuilder.setTitle(R.string.alertCreationArc);
+                                    alertDialogBuilder.setMessage(R.string.alertCreationArcMessage).setPositiveButton(R.string.alertCreationNodeAdd, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             String label = input.getText().toString();
-                                            ArcFinal newArc = new ArcFinal(startingNode,nodeDest,label);
-                                            if (label.length() > 0) {
-                                                firstGraph.addArc(newArc);
-                                                updateView();
-                                            }
+                                            ArcFinal newArc = new ArcFinal(startingNode,endNode,label);
+                                            firstGraph.addArc(newArc);
+                                            updateView();
                                         }
                                     });
                                     alertDialogBuilder.setView(input);
                                     alertDialog = alertDialogBuilder.create();
                                     alertDialog.show();
-
-
-
                                     startedNode = false;
                                     firstGraph.removeArcTemp();
                                     updateView();
@@ -125,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
                                     firstGraph.removeArcTemp();
                                     updateView();
                                 }
-
                             break;
                         default:
                             break;
@@ -147,10 +139,8 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             String label = input.getText().toString();
                             Node node = new Node(lastTouchDownX, lastTouchDownY, (float) 40, Color.BLACK, label);
-                            if (label.length() > 0) {
-                                firstGraph.addNode(node);
-                                updateView();
-                            }
+                            firstGraph.addNode(node);
+                            updateView();
                         }
                     });
                     alertDialogBuilder.setView(input);
@@ -224,11 +214,13 @@ public class MainActivity extends AppCompatActivity {
             if (this.isOnNode()) {
                 super.onCreateContextMenu(menu, v, menuInfo);
                 getMenuInflater().inflate(R.menu.node_menu, menu);
-                menu.setHeaderTitle("Edit Node");
+                nameOfNode = firstGraph.checkNode(lastTouchDownX,lastTouchDownY).getLabel();
+                menu.setHeaderTitle("Edit Node : " + nameOfNode);
             } else if (this.isOnArc()){
                 super.onCreateContextMenu(menu, v, menuInfo);
                 getMenuInflater().inflate(R.menu.arc_menu, menu);
-                menu.setHeaderTitle("Edit Path");
+                nameOfArc = firstGraph.getArc(lastTouchDownX,lastTouchDownY).getLabel();
+                menu.setHeaderTitle("Edit Node : " + nameOfArc);
             }
         }
     }
@@ -280,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                                 // if this button is clicked, close
                                 // current activity
                                 String value = inputTaille.getText().toString();
-                                if(value.length()>0 && value != null){
+                                if(value.length()==2){
                                     affectedNode.setRayon(Float.valueOf(value));
                                     updateView();
                                     inputTaille.setText("");
@@ -302,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.edit_color_green:
-                firstGraph.changeNodeColor(Color.GREEN,firstGraph.checkNode(lastTouchDownX, lastTouchDownY));
+                firstGraph.changeNodeColor(0xFF32CD32,firstGraph.checkNode(lastTouchDownX, lastTouchDownY));
                 this.updateView();
                 return true;
 
@@ -312,12 +304,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.edit_color_orange:
-                firstGraph.changeNodeColor(Color.YELLOW,firstGraph.checkNode(lastTouchDownX, lastTouchDownY));
+                firstGraph.changeNodeColor(0xFFFF8C00,firstGraph.checkNode(lastTouchDownX, lastTouchDownY));
                 this.updateView();
                 return true;
 
             case R.id.edit_color_cyan:
-                firstGraph.changeNodeColor(Color.CYAN,firstGraph.checkNode(lastTouchDownX, lastTouchDownY));
+                firstGraph.changeNodeColor(0xFF00CED1,firstGraph.checkNode(lastTouchDownX, lastTouchDownY));
                 this.updateView();
                 return true;
 
@@ -347,11 +339,8 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.alertEditLabelArcChange,new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 String label = changeArcLabel.getText().toString();
-
-                                if(label.length()>0){
-                                    firstGraph.changeArcLabel(label,firstGraph.getArc(lastTouchDownX, lastTouchDownY));
-                                    updateView();
-                                }
+                                firstGraph.changeArcLabel(label,firstGraph.getArc(lastTouchDownX, lastTouchDownY));
+                                updateView();
                             }
                         });
                 alertArcDialogBuilder.setView(changeArcLabel);
@@ -361,7 +350,6 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.edit_size_arc:
                 Toast.makeText(this, this.getText(R.string.edit_size_arc), Toast.LENGTH_LONG).show();
-
                 final EditText inputTailleArc = new EditText(this);
                 inputTailleArc.setInputType(InputType.TYPE_CLASS_NUMBER);
                 AlertDialog.Builder alertDialogBuilderArcTaille = new AlertDialog.Builder(
@@ -373,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
                                 // if this button is clicked, close
                                 // current activity
                                 String value = inputTailleArc.getText().toString();
-                                if(value.length()>0 && value != null){
+                                if(value.length()==2){
                                     affectedArc.setWidth(Integer.valueOf(value));
                                     updateView();
                                     inputTailleArc.setText("");
@@ -395,7 +383,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.edit_color_arc_green:
-                firstGraph.changeArcColor(Color.GREEN,firstGraph.getArc(lastTouchDownX, lastTouchDownY));
+                firstGraph.changeArcColor(0xFF32CD32,firstGraph.getArc(lastTouchDownX, lastTouchDownY));
                 this.updateView();
                 return true;
 
@@ -405,12 +393,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.edit_color_arc_orange:
-                firstGraph.changeArcColor(Color.YELLOW,firstGraph.getArc(lastTouchDownX, lastTouchDownY));
+                firstGraph.changeArcColor(0xFFFF8C00,firstGraph.getArc(lastTouchDownX, lastTouchDownY));
                 this.updateView();
                 return true;
 
             case R.id.edit_color_arc_cyan:
-                firstGraph.changeArcColor(Color.CYAN,firstGraph.getArc(lastTouchDownX, lastTouchDownY));
+                firstGraph.changeArcColor(0xFF00CED1,firstGraph.getArc(lastTouchDownX, lastTouchDownY));
                 this.updateView();
                 return true;
 

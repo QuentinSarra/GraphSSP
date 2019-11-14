@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GraphSSP</string>
+    <string name="add_node">Ajout de noeud</string>
+    <string name="add_node_toast">Vous pouvez ajouter des noeuds</string>
+    <string name="add_path">Ajout d\'arc</string>
+    <string name="add_path_toast">Vous pouvez ajouter un arc</string>
+    <string name="alertCreationArc">Créer un nouvel arc</string>
+    <string name="alertCreationArcMessage">Entrer l\'étiquette de l\'arc</string>
+    <string name="alertCreationNode">Créer un nouveau noeud</string>
+    <string name="alertCreationNodeAdd">Ajouter</string>
+    <string name="alertCreationNodeMessage">Entrer l\'étiquette du noeud</string>
+    <string name="alertEditLabelArc">Changer l\'étiquette de l\'arc</string>
+    <string name="alertEditLabelArcChange">Changer</string>
+    <string name="alertEditLabelArcMessage">Entrer la nouvelle étiquette de l\'arc</string>
+    <string name="alertEditLabelNode">Changer l\'étiquette du noeud</string>
+    <string name="alertEditLabelNodeChange">Changer</string>
+    <string name="alertEditLabelNodeMessage">Entrer la nouvelle étiquette du noeud</string>
+    <string name="alertEditSizeArc">Entrer la nouvelle taille (doit être comprise entre 10 et 99)</string>
+    <string name="alertEditSizeNode">Entrer la nouvelle taille (doit être comprise entre 10 et 99)</string>
+    <string name="alertEditSizeArcEdit">Modifier</string>
+    <string name="alertEditSizeNodeEdit">Modifier</string>
+    <string name="color_black">Noir</string>
+    <string name="color_blue">Bleu</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_green">Vert</string>
+    <string name="color_magenta">Magenta</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_red">Rouge</string>
+    <string name="delete_arc">Supprimer</string>
+    <string name="delete_node">Supprimer</string>
+    <string name="edit">Modifier</string>
+    <string name="edit_color_arc">Modifier la couleur</string>
+    <string name="edit_color_node">Modifier la couleur</string>
+    <string name="edit_label__arc">Modifier l\'étiquette</string>
+    <string name="edit_label__node">Modifier l\'étiquette</string>
+    <string name="edit_size_arc">Modifier la taille</string>
+    <string name="edit_size_node">Modifier la taille</string>
+    <string name="edit_toast">Mode Modification</string>
+    <string name="move">Mode Déplacement</string>
+    <string name="move_node_toast">Vous pouvez déplacer les noeuds</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="reset_toast">Le graphe a été réinitialisé</string>
+    <string name="settings">Paramètres</string>
+</resources>
