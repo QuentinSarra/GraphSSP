@@ -77,7 +77,25 @@ public class MainActivity extends AppCompatActivity {
                             if(creationArcMode){
                                 if(isOnNode() && startedNode) {
                                     nodeDest = affectedNode;
-                                    firstGraph.addArc(new ArcFinal(nodeDeb,nodeDest,"1"));
+                                    final EditText input = new EditText(MainActivity.this);
+                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                                    alertDialogBuilder.setTitle("Create a  new Arc");
+                                    alertDialogBuilder.setMessage("Enter the Arc label").setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            String label = input.getText().toString();
+                                            ArcFinal newArc = new ArcFinal(nodeDeb,nodeDest,label);
+                                            if (label.length() > 0) {
+                                                firstGraph.addArc(newArc);
+                                                updateView();
+                                            }
+                                        }
+                                    });
+                                    alertDialogBuilder.setView(input);
+                                    alertDialog = alertDialogBuilder.create();
+                                    alertDialog.show();
+
+
+
                                     startedNode = false;
                                     firstGraph.removeArcTemp();
                                     updateView();
