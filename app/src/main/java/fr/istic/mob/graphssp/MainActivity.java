@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                                 startedNode = true;
                             }
                             break;
+<<<<<<< HEAD
                         case MotionEvent.ACTION_MOVE:
                             if (firstGraph.getArcTemp() != null) {
                                 firstGraph.setArcTemp(lastTouchDownX, lastTouchDownY);
@@ -97,6 +98,31 @@ public class MainActivity extends AppCompatActivity {
                                 if (isOnNode() && startedNode) {
                                     endNode = affectedNode;
                                     firstGraph.addArc(new ArcFinal(startingNode, endNode, "1"));
+=======
+                        case MotionEvent.ACTION_UP :
+                            if(creationArcMode){
+                                if(isOnNode() && startedNode) {
+                                    nodeDest = affectedNode;
+                                    final EditText input = new EditText(MainActivity.this);
+                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                                    alertDialogBuilder.setTitle("Create a  new Arc");
+                                    alertDialogBuilder.setMessage("Enter the Arc label").setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            String label = input.getText().toString();
+                                            ArcFinal newArc = new ArcFinal(nodeDeb,nodeDest,label);
+                                            if (label.length() > 0) {
+                                                firstGraph.addArc(newArc);
+                                                updateView();
+                                            }
+                                        }
+                                    });
+                                    alertDialogBuilder.setView(input);
+                                    alertDialog = alertDialogBuilder.create();
+                                    alertDialog.show();
+
+
+
+>>>>>>> b7b461f2457eaffdb9a871930dddb56a664c931d
                                     startedNode = false;
                                     firstGraph.removeArcTemp();
                                     updateView();
