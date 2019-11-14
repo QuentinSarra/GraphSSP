@@ -38,7 +38,7 @@ public class DrawableGraph extends Drawable {
         Paint paintLblArc = new TextPaint();
         paintLbl.setColor(Color.WHITE);
         paintLbl.setTextAlign(Paint.Align.CENTER);
-        paintLbl.setTextSize(25);
+        paintLbl.setTextSize(40);
         paintLblArc.setColor(Color.BLACK);
         paintLblArc.setTextAlign(Paint.Align.CENTER);
 
