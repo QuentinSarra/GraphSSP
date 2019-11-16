@@ -3,14 +3,18 @@ package fr.istic.mob.graphssp;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -30,20 +34,61 @@ public class MainActivity extends AppCompatActivity {
     private boolean canMove=true, startedNode=false;
     private AlertDialog alertDialog;
 
+    private float[] dimensions = new float[2];
+
+
+    class MyGlobalListenerClass implements ViewTreeObserver.OnGlobalLayoutListener {
+        @Override
+        public void onGlobalLayout() {
+            View v = (View) findViewById(R.id.imgView);
+            float x = v.getWidth();
+            float y = v.getHeight();
+            dimensions[0] = x;
+            dimensions[1] = y;
+            Log.d("TAILLE VIEW", "X : " + x + " // Y : " +y);
+            firstGraph.setDimensions(dimensions);
+            Log.d("TAILLE VIEW22222", "X : " + firstGraph.getDimensions()[0] + " // Y : " +firstGraph.getDimensions()[1]);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+            firstGraph.rotateGraph();
+            updateView();
+
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+            firstGraph.rotateGraph();
+            updateView();
+        }
+    }
+
+
+
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.registerForContextMenu(this.findViewById(R.id.imgView));
+
         if (firstGraph == null) {
-            firstGraph = new Graph();
+            firstGraph = new Graph(dimensions);
         }
         view = findViewById(R.id.imgView);
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new MyGlobalListenerClass());
         if (graph == null) {
             graph = new DrawableGraph(firstGraph);
         }
         view.setImageDrawable(graph);
+
+
 
         view.setOnTouchListener(new View.OnTouchListener() {
             Node nodedeb;
@@ -146,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate( R.menu.main_menu, menu);
@@ -157,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.reset:
                 Toast.makeText( this, this.getText(R.string.reset_toast), Toast.LENGTH_LONG).show();
-                firstGraph = new Graph();
+                firstGraph = new Graph(dimensions);
                 updateView();
                 return true;
             case R.id.addNode:

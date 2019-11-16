@@ -1,5 +1,6 @@
 package fr.istic.mob.graphssp;
 
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -10,12 +11,16 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
 import java.util.ArrayList;
+
+
 
 import static fr.istic.mob.graphssp.Graph.getScreenHeight;
 import static fr.istic.mob.graphssp.Graph.getScreenWidth;
@@ -31,7 +36,7 @@ public class DrawableGraph extends Drawable {
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-
+        
 
         Paint paint = new Paint();
         Paint paintLbl = new Paint();
@@ -44,7 +49,7 @@ public class DrawableGraph extends Drawable {
 
         int height = getScreenHeight();
         int width = getScreenWidth();
-        int totalSize = height + width;
+
 
 
 
@@ -107,8 +112,15 @@ public class DrawableGraph extends Drawable {
             paint.setColor(n.getColor());
             canvas.drawOval(n,paint);
             canvas.drawText(n.getLabel(),n.getX(),n.getY()+7,paintLbl);
+            Log.d("Noeuds","Noeud["+n.getLabel()+"] - X : " +n.getX()+ " - Y : " + n.getY() + " - Color : " + n.getColor() + "- Rayon : " + n.getRayon());
+
+
+
 
         }
+
+       // Log.d("Dimensions X", Float.toString(graph.getDimensions()[0]));
+       // Log.d("Dimensions Y", Float.toString(graph.getDimensions()[1]));
     }
 
     @Override
