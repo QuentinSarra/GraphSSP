@@ -29,6 +29,7 @@ import static java.lang.Math.toDegrees;
 
 public class DrawableGraph extends Drawable {
     Graph graph;
+    float x,y;
 
     public DrawableGraph(Graph graph) {
         this.graph = graph;
@@ -112,15 +113,14 @@ public class DrawableGraph extends Drawable {
             paint.setColor(n.getColor());
             canvas.drawOval(n,paint);
             canvas.drawText(n.getLabel(),n.getX(),n.getY()+7,paintLbl);
-            Log.d("Noeuds","Noeud["+n.getLabel()+"] - X : " +n.getX()+ " - Y : " + n.getY() + " - Color : " + n.getColor() + "- Rayon : " + n.getRayon());
+            //Log.d("Noeuds","Noeud["+n.getLabel()+"] - X : " +n.getX()+ " - Y : " + n.getY() + " - Color : " + n.getColor() + "- Rayon : " + n.getRayon());
 
 
 
 
         }
 
-       // Log.d("Dimensions X", Float.toString(graph.getDimensions()[0]));
-       // Log.d("Dimensions Y", Float.toString(graph.getDimensions()[1]));
+
     }
 
     @Override

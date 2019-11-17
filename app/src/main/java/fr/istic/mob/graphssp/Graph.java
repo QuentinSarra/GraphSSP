@@ -16,18 +16,19 @@ public class Graph {
     private ArrayList<Node> nodes;
     private ArrayList<ArcFinal> arcs;
     private ArcTemp arcTemp;
-    private float[] dimensions;
+    public float x,y;
 
 
-    public Graph(float[] dimensions) {
-        this.dimensions = dimensions;
+    public Graph() {
+
         nodes = new ArrayList<Node>();
         arcs = new ArrayList<ArcFinal>();
 
-        float width = this.getDimensions()[0];
-        float height= this.getDimensions()[1];
+        float width = x;
+        float height= y;
 
-        Log.d("TEST1", Float.toString(this.getDimensions()[0]));
+        Log.d("Size :", ""+width +" x " + height);
+
         float div = (float) 1.2;
 /*
         nodes.add(new Node(100,100,100,Color.BLACK,"00"));
@@ -41,8 +42,7 @@ public class Graph {
 
 
         nodes.add(new Node(width/2,height/2,(width+height)/60, Color.BLACK,"5"));
-        Log.d("TEST",Float.toString(width/2));
-        Log.d("TEST",Float.toString(width));
+
         nodes.add(new Node((float)width/2,(float)height/8,(float)(width+height)/60, Color.BLACK,"2"));
         nodes.add(new Node((float)width/2,(float)height/div,(float)(width+height)/60, Color.BLACK,"8"));
         nodes.add(new Node((float)width/div,(float)height/2,(float)(width+height)/60, Color.BLACK,"6"));
@@ -57,8 +57,9 @@ public class Graph {
         arcs.add(new ArcFinal(nodes.get(3), nodes.get(2),"TestArc"));
     }
 
-    public void rotateGraph(){
-
+    public void rotateGraph(float x, float y){
+        this.x = x;
+        this.y = y;
         ArrayList<Node> oldNodes = nodes;
         ArrayList<Node> nodesTemp = new ArrayList<Node>();
 
@@ -129,19 +130,24 @@ public class Graph {
         arcs.add(a);
     }
 
+    public float getWidth(){
+        return this.x;
+    }
+    public void setWidth(float x){
+        this.x=x;
+    }
+    public float getHeigth(){
+        return this.y;
+    }
+    public void setHeigth(float y){
+        this.y=y;
+    }
     public void removeArc(ArcFinal a) {
         arcs.remove(a);
     }
 
     public void removeArcTemp() {
         arcTemp=null;
-    }
-
-    public void setDimensions(float[] dimensions){
-        this.dimensions = dimensions;
-    }
-    public float[] getDimensions(){
-        return dimensions;
     }
 
     public static int getScreenWidth() {

@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import fr.istic.mob.graphssp.Graph.*;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,36 +35,56 @@ public class MainActivity extends AppCompatActivity {
     private boolean canMove=true, startedNode=false;
     private AlertDialog alertDialog;
 
-    private float[] dimensions = new float[2];
+
+    public MyGlobalListenerClass blbl = new MyGlobalListenerClass();
+
+
+
+
 
 
     class MyGlobalListenerClass implements ViewTreeObserver.OnGlobalLayoutListener {
+        public float x, y;
+
+        public MyGlobalListenerClass() {
+
+        }
+
+
+
         @Override
         public void onGlobalLayout() {
             View v = (View) findViewById(R.id.imgView);
-            float x = v.getWidth();
-            float y = v.getHeight();
-            dimensions[0] = x;
-            dimensions[1] = y;
-            Log.d("TAILLE VIEW", "X : " + x + " // Y : " +y);
-            firstGraph.setDimensions(dimensions);
-            Log.d("TAILLE VIEW22222", "X : " + firstGraph.getDimensions()[0] + " // Y : " +firstGraph.getDimensions()[1]);
+            this.x = v.getWidth();
+            this.y = v.getHeight();
+
+            Log.d("TAILLE VIEW", "X : " + x + " - Y : " + y);
+
+
         }
+
+
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        blbl.onGlobalLayout();
+        float x = blbl.x;
+        float y = blbl.y;
+
+        Log.d("OnConfig","" +blbl.x + " x " + blbl.y);
 
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-            firstGraph.rotateGraph();
-            updateView();
 
+            firstGraph.rotateGraph(x,y);
+            updateView();
+            Log.d("SIZE","" + blbl.x + " x " + blbl.y);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-            firstGraph.rotateGraph();
+            firstGraph.rotateGraph(x,y);
             updateView();
         }
     }
@@ -79,12 +100,18 @@ public class MainActivity extends AppCompatActivity {
         this.registerForContextMenu(this.findViewById(R.id.imgView));
 
         if (firstGraph == null) {
-            firstGraph = new Graph(dimensions);
+            firstGraph = new Graph();
+            firstGraph.x=blbl.x;
+            firstGraph.y=blbl.y;
+
         }
         view = findViewById(R.id.imgView);
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new MyGlobalListenerClass());
+        view.getViewTreeObserver().addOnGlobalLayoutListener(blbl);
+
         if (graph == null) {
             graph = new DrawableGraph(firstGraph);
+            graph.x = blbl.x;
+            graph.y = blbl.y;
         }
         view.setImageDrawable(graph);
 
@@ -204,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.reset:
                 Toast.makeText( this, this.getText(R.string.reset_toast), Toast.LENGTH_LONG).show();
-                firstGraph = new Graph(dimensions);
+                firstGraph = new Graph();
                 updateView();
                 return true;
             case R.id.addNode:
@@ -364,8 +391,10 @@ public class MainActivity extends AppCompatActivity {
         view.setImageDrawable(graph);
     }
 
+
     public boolean isOnNode(){
         affectedNode = firstGraph.checkNode(lastTouchDownX,lastTouchDownY);
         return affectedNode != null;
     }
+
 }
