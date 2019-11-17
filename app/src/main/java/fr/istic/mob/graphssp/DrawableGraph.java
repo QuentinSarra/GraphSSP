@@ -50,35 +50,57 @@ public class DrawableGraph extends Drawable {
             paintArc.setStyle(Paint.Style.STROKE);
             paintLblArc.setTextSize(a.getLargeurLabel());
             Path newPath = new Path();
-            newPath.moveTo(a.getNodeOrigine().getX(),a.getNodeOrigine().getY());
-            newPath.lineTo(a.getNodeDest().getX(),a.getNodeDest().getY());
-            canvas.drawPath(newPath, paintArc);
-
-            PathMeasure pm = new PathMeasure(newPath,false);
-            float [] middlePoint = {0f, 0f};
-            float [] tangent = {0f, 0f};
-            pm.getPosTan(pm.getLength()/2,middlePoint,tangent);
-            a.setMiddlePoint(middlePoint);
-            a.setTangent(tangent);
-            //Log.d("DEBUG","tangente de l'arc '"+ a.getLabel() + "' : x = " + tangent[0] + "; y = " +tangent[1] );
-
-
-            canvas.save();
-            float x = a.getMiddlePoint()[0];
-            float y = a.getMiddlePoint()[1];
-            float nx = tangent[0];
-            float ny = tangent[1];
-            float degrees = ny/nx;
-            double degs = toDegrees(atan(degrees));
-
-            canvas.rotate((float)degs,x,y);
-            if (ny > 0){
-                canvas.drawText(a.getLabel(),x,y-25,paintLblArc);
+            newPath.moveTo(a.getNodeOrigine().getX(), a.getNodeOrigine().getY());
+            if (!(a instanceof ArcLoop)) {
+                newPath.lineTo(a.getNodeDest().getX(), a.getNodeDest().getY());
+                canvas.drawPath(newPath, paintArc);
+                PathMeasure pm = new PathMeasure(newPath,false);
+                float [] middlePoint = {0f, 0f};
+                float [] tangent = {0f, 0f};
+                pm.getPosTan(pm.getLength()/2,middlePoint,tangent);
+                a.setMiddlePoint(middlePoint);
+                a.setTangent(tangent);
+                canvas.save();
+                float x = a.getMiddlePoint()[0];
+                float y = a.getMiddlePoint()[1];
+                float nx = tangent[0];
+                float ny = tangent[1];
+                float degrees = ny/nx;
+                double degs = toDegrees(atan(degrees));
+                canvas.rotate((float) degs, x, y);
+                if (ny > 0) {
+                    canvas.drawText(a.getLabel(), x, y - 25, paintLblArc);
+                } else if (ny <= 0) {
+                    canvas.drawText(a.getLabel(), x, y + 45, paintLblArc);
+                }
+                canvas.restore();
             }
-            else if (ny <= 0){
-                canvas.drawText(a.getLabel(),x,y+45,paintLblArc);
+            if(a instanceof ArcLoop) {
+                Node n = a.getNodeOrigine();
+                newPath.cubicTo(n.getX() + n.getRayon() + 150, n.getY() + n.getRayon() + 300,
+                        n.getX() + n.getRayon() + 150, n.getY() - n.getRayon() - 300,
+                        n.getX(), n.getY());
+                canvas.drawPath(newPath, paintArc);
+                PathMeasure pm = new PathMeasure(newPath,false);
+                float [] middlePoint = {0f, 0f};
+                float [] tangent = {0f, 0f};
+                pm.getPosTan(pm.getLength()/2,middlePoint,tangent);
+                a.setMiddlePoint(middlePoint);
+                a.setTangent(tangent);
+                canvas.save();
+                float x = a.getMiddlePoint()[0];
+                float y = a.getMiddlePoint()[1];
+                float nx = tangent[0];
+                float ny = tangent[1];
+                canvas.rotate((float) 270, x, y);
+                if (ny > 0) {
+                    canvas.drawText(a.getLabel(), x, y - 25, paintLblArc);
+                } else if (ny <= 0) {
+                    canvas.drawText(a.getLabel(), x, y + 45, paintLblArc);
+                }
+                canvas.restore();
             }
-            canvas.restore();
+
         }
 
         Path path;

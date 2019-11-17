@@ -4,8 +4,6 @@ package fr.istic.mob.graphssp;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.RectF;
-import android.util.DisplayMetrics;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,12 +13,15 @@ public class Graph {
 
     private ArrayList<Node> nodes;
     private ArrayList<ArcFinal> arcs;
+    private ArrayList<ArcLoop> loops;
+    private ArrayList<Arc> allArcs;
     private ArcTemp arcTemp;
 
 
     public Graph() {
         nodes = new ArrayList<Node>();
         arcs = new ArrayList<ArcFinal>();
+        allArcs = new ArrayList<Arc>();
 
         int height = getScreenHeight();
         int width = getScreenWidth();
@@ -36,6 +37,7 @@ public class Graph {
         nodes.add(new Node((float)width/8,(float)height/8,(float)(width+height)/60, Color.BLACK,"1"));
         nodes.add(new Node((float)width/8,(float)height/div,(float)(width+height)/60, Color.BLACK,"7"));
 
+        arcs.add(new ArcLoop(nodes.get(0), "coucou"));
     }
 
     public ArrayList<Node> getNodes(){
@@ -58,7 +60,6 @@ public class Graph {
 
     public void removeNode(Node n) {
         nodes.remove(n);
-
         Iterator<ArcFinal> it= arcs.iterator();
         while (it.hasNext()){
             ArcFinal arc = it.next();
@@ -133,4 +134,8 @@ public class Graph {
         }
         return null;
     }
+
+    public ArrayList<ArcLoop> getArcsLoop (){return loops;};
+
+
 }

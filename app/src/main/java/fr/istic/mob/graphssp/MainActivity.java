@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private static Graph firstGraph;
     private ImageView view;
     private static DrawableGraph graph;
-    private Node affectedNode,startingNode, endNode;
+    private Node affectedNode,startingNode, endNode, firstNode;
     private ArcFinal affectedArc;
     private float lastTouchDownX;
     private float lastTouchDownY;
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         case MotionEvent.ACTION_DOWN:
                             if (isOnNode() && creationArcMode && !startedNode) {
                                 startingNode = affectedNode;
+                                firstNode = startingNode;
                                 firstGraph.initArcTemp(lastTouchDownX, lastTouchDownY);
                                 updateView();
                                 startedNode = true;
@@ -101,8 +102,13 @@ public class MainActivity extends AppCompatActivity {
                                     alertDialogBuilder.setMessage(R.string.alertCreationArcMessage).setPositiveButton(R.string.alertCreationNodeAdd, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             String label = input.getText().toString();
-                                            ArcFinal newArc = new ArcFinal(startingNode,endNode,label);
-                                            firstGraph.addArc(newArc);
+                                            if(firstNode == endNode) {
+                                                ArcFinal newArc = new ArcLoop(startingNode, label);
+                                                firstGraph.addArc(newArc);
+                                            }else{
+                                                ArcFinal newArc = new ArcFinal(startingNode, endNode, label);
+                                                firstGraph.addArc(newArc);
+                                            }
                                             updateView();
                                         }
                                     });
@@ -153,8 +159,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -207,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if(editMode) {
@@ -224,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
 
     @Override
