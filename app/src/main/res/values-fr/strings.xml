@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GraphSSP</string>
+    <string name="app_name">GraphSalernoSarrazinPoilane</string>
     <string name="add_node">Ajout de noeud</string>
     <string name="add_node_toast">Vous pouvez ajouter des noeuds</string>
     <string name="add_path">Ajout d\'arc</string>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GraphSSP</string>
+    <string name="app_name">GraphSalernoSarrazinPoilane</string>
     <string name="reset">Reset</string>
     <string name="add_node">Add Node</string>
     <string name="add_path">Add Path</string>
