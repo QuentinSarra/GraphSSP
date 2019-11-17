@@ -238,14 +238,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.save_graph:
                 Toast.makeText( this, this.getText(R.string.save_graph), Toast.LENGTH_LONG).show();
-                try {
-                    saveGraph();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                firstGraph.saveArrayList(firstGraph.getNodes(),"node");
+                firstGraph.saveArrayList2(firstGraph.getArcs(),"arc");
                 return true;
             case R.id.list_graph:
+                Toast.makeText( this, this.getText(R.string.list_graph), Toast.LENGTH_LONG).show();
 
+                updateView();
+                return true;
             case R.id.sendMail:
                 Toast.makeText( this, this.getText(R.string.sendMail), Toast.LENGTH_LONG).show();
                 if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
@@ -593,24 +593,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }).show();
-    }
-
-    public void saveGraph() throws IOException {
-        Bitmap bitmap;
-        Drawable drawable = graph.getCurrent();
-        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
-        } else {
-            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        }
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        File file = new File(Environment.getExternalStorageDirectory(), "graph.png");
-        FileOutputStream fOut = new FileOutputStream(file);
-        bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
-        fOut.flush();
-        fOut.close();
     }
 
 }
