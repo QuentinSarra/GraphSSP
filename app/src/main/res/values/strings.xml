@@ -38,6 +38,7 @@
     <string name="delete_arc">Delete</string>
     <string name="edit_label__arc">Edit Label</string>
     <string name="edit_size_arc">Edit Size</string>
+    <string name="sendMail">Send Mail</string>
     <string name="edit_color_arc">Edit Color</string>
     <string name="color_arc_red">Red</string>
     <string name="color_arc_green">Green</string>
@@ -46,4 +47,7 @@
     <string name="color_arc_cyan">Cyan</string>
     <string name="color_arc_magenta">Magenta</string>
     <string name="color_arc_black">Black</string>
+    <string name="graph">Graph</string>
+    <string name="save_graph">Save Graph</string>
+    <string name="list_graph">List of Graph</string>
 </resources>

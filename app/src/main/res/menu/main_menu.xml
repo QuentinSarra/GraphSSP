@@ -31,4 +31,28 @@
         android:orderInCategory="100"
         app:showAsAction="never"
         android:title="@string/settings" />
+    <item
+        android:id="@+id/sendMail"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/sendMail" />
+    <item
+        android:id="@+id/graph"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/graph" >
+         <menu>
+            <item
+                android:id="@+id/save_graph"
+                android:orderInCategory="100"
+                app:showAsAction="never"
+                android:title="@string/save_graph" />
+            <item
+                android:id="@+id/list_graph"
+                android:orderInCategory="100"
+                app:showAsAction="never"
+                android:title="@string/list_graph" />
+
+        </menu>
+    </item>
 </menu>
