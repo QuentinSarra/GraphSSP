@@ -1,10 +1,22 @@
 package fr.istic.mob.graphssp;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.text.InputType;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -16,8 +28,17 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class MainActivity extends AppCompatActivity {
 
     private static Graph firstGraph;
@@ -30,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean creationNodeMode = false, creationArcMode = false, editMode = true, movingMode = false;
     private boolean canMove=true, startedNode=false;
     private AlertDialog alertDialog;
+
     private String nameOfNode, nameOfArc;
+    public static Context context;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -102,11 +126,16 @@ public class MainActivity extends AppCompatActivity {
                                     alertDialogBuilder.setMessage(R.string.alertCreationArcMessage).setPositiveButton(R.string.alertCreationNodeAdd, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             String label = input.getText().toString();
+
                                             if(firstNode == endNode) {
                                                 ArcFinal newArc = new ArcLoop(startingNode, label);
                                                 firstGraph.addArc(newArc);
                                             }else{
                                                 ArcFinal newArc = new ArcFinal(startingNode, endNode, label);
+
+                                            ArcFinal newArc = new ArcFinal(startingNode,endNode,label);
+                                            if (label.length() > 0) {
+
                                                 firstGraph.addArc(newArc);
                                             }
                                             updateView();
@@ -158,6 +187,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
     @Override
@@ -166,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
@@ -205,6 +237,38 @@ public class MainActivity extends AppCompatActivity {
                 movingMode =false;
                 editMode=true;
                 updateView();
+                return true;
+            case R.id.save_graph:
+                Toast.makeText( this, this.getText(R.string.save_graph), Toast.LENGTH_LONG).show();
+                firstGraph.saveArrayList(firstGraph.getNodes(),"node");
+                firstGraph.saveArrayList2(firstGraph.getArcs(),"arc");
+                return true;
+            case R.id.list_graph:
+                Toast.makeText( this, this.getText(R.string.list_graph), Toast.LENGTH_LONG).show();
+
+                updateView();
+                return true;
+            case R.id.sendMail:
+                Toast.makeText( this, this.getText(R.string.sendMail), Toast.LENGTH_LONG).show();
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                {
+                    if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) == true)
+                    {
+                        explain();
+                    }
+                    else
+                    {
+                        askForPermission();
+                    }
+                }
+                else
+                {
+                    try {
+                        sendEmail(view);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -271,8 +335,6 @@ public class MainActivity extends AppCompatActivity {
                 alertDialogBuilderTaille
                         .setPositiveButton(R.string.alertEditSizeNodeEdit,new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                // if this button is clicked, close
-                                // current activity
                                 String value = inputTaille.getText().toString();
                                 if(value.length()==2){
                                     affectedNode.setRayon(Float.valueOf(value));
@@ -433,4 +495,102 @@ public class MainActivity extends AppCompatActivity {
         affectedArc = firstGraph.getArc(lastTouchDownX,lastTouchDownY);
         return affectedArc != null;
     }
+
+    public void sendEmail(View view) throws IOException {
+        /*Drawable d = graph.getCurrent();
+        BitmapDrawable bitDw = ((BitmapDrawable) d);
+        Bitmap bitmap = bitDw.getBitmap();
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() ,  "graph.png");
+        FileOutputStream fOut = new FileOutputStream(file);
+
+        bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+        fOut.flush();
+        fOut.close();
+        Uri u = Uri.fromFile(file);*/
+        Bitmap bitmap;
+        Drawable drawable = graph.getCurrent();
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        File file = new File(Environment.getExternalStorageDirectory(), "graph.png");
+        FileOutputStream fOut = new FileOutputStream(file);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+        fOut.flush();
+        fOut.close();
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("image/*");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"qsarrazin35@gmail.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "Mon Graphe");
+        i.putExtra(Intent.EXTRA_STREAM,Uri.parse("content://"+Environment.getExternalStorageDirectory() +"graph.png"));
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (ActivityNotFoundException ex) {
+            Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void askForPermission()
+    {
+        requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, 2);
+    }
+
+    private void explain()
+    {
+        Snackbar.make(view, "Cette permission est nécessaire pour envoyer des mails", Snackbar.LENGTH_LONG).setAction("Activer", new View.OnClickListener()
+        {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View view)
+            {
+                askForPermission();            }
+        }).show();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        if(requestCode == 2)
+        {
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                try {
+                    sendEmail(view);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(shouldShowRequestPermissionRationale(permissions[0]) == false)
+            {
+                displayOptions();
+            }
+            else
+            {
+                explain();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void displayOptions()
+    {
+        Snackbar.make(view, "Vous avez désactivé la permission", Snackbar.LENGTH_LONG).setAction("Paramètres", new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                final Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                final Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        }).show();
+    }
+
 }

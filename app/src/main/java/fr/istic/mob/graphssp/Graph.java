@@ -1,22 +1,32 @@
 package fr.istic.mob.graphssp;
 
 
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.RectF;
 
+import android.os.Build;
+import android.preference.PreferenceManager;
+
+
+import androidx.annotation.RequiresApi;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public class Graph {
+public class Graph  {
 
     private ArrayList<Node> nodes;
     private ArrayList<ArcFinal> arcs;
     private ArrayList<ArcLoop> loops;
     private ArrayList<Arc> allArcs;
     private ArcTemp arcTemp;
-
 
     public Graph() {
         nodes = new ArrayList<Node>();
@@ -137,5 +147,43 @@ public class Graph {
 
     public ArrayList<ArcLoop> getArcsLoop (){return loops;};
 
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void saveArrayList(ArrayList<Node> list, String key){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.context);
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.apply();     // This line is IMPORTANT !!!
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void saveArrayList2(ArrayList<ArcFinal> list, String key){
+        SharedPreferences prefs2 = PreferenceManager.getDefaultSharedPreferences(MainActivity.context);
+        SharedPreferences.Editor editor = prefs2.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.apply();     // This line is IMPORTANT !!!
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public ArrayList<Node> getArrayList(String key){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.context);
+        Gson gson = new Gson();
+        String json = prefs.getString(key, null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        return gson.fromJson(json, type);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public ArrayList<ArcFinal> getArrayList2(String key){
+        SharedPreferences prefs2 = PreferenceManager.getDefaultSharedPreferences(MainActivity.context);
+        Gson gson = new Gson();
+        String json = prefs2.getString(key, null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        return gson.fromJson(json, type);
+    }
 
 }
