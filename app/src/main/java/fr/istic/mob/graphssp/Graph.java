@@ -147,7 +147,7 @@ public class Graph  {
 
     public ArrayList<ArcLoop> getArcsLoop (){return loops;};
 
-
+    //Ces quatres fonctions ont pour but de sauvegarder les arraylist.
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void saveArrayList(ArrayList<Node> list, String key){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.context);
@@ -155,7 +155,7 @@ public class Graph  {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         editor.putString(key, json);
-        editor.apply();     // This line is IMPORTANT !!!
+        editor.apply();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -165,7 +165,7 @@ public class Graph  {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         editor.putString(key, json);
-        editor.apply();     // This line is IMPORTANT !!!
+        editor.apply();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

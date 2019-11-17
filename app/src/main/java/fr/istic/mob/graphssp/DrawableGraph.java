@@ -9,16 +9,10 @@ import android.graphics.PathMeasure;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-
-import java.util.ArrayList;
-
-import static fr.istic.mob.graphssp.Graph.getScreenHeight;
-import static fr.istic.mob.graphssp.Graph.getScreenWidth;
 import static java.lang.Math.atan;
 import static java.lang.Math.toDegrees;
 
@@ -42,7 +36,7 @@ public class DrawableGraph extends Drawable {
         paintLblArc.setColor(Color.BLACK);
         paintLblArc.setTextAlign(Paint.Align.CENTER);
 
-
+        //Nous commençons par dessiner les arcs.
         for (ArcFinal a : graph.getArcs()){
             Paint paintArc = new Paint();
             paintArc.setStrokeWidth(a.getWidth());
@@ -109,6 +103,7 @@ public class DrawableGraph extends Drawable {
         paintTemp.setStrokeWidth(5);
         paintTemp.setStyle(Paint.Style.STROKE);
         ArcTemp arctemp = graph.getArcTemp();
+        //Ensuite nous dessinons l'arc Temporaire.
         if(arctemp != null){
             path = new Path();
             path.moveTo(arctemp.getNodeOrigine().getX(),arctemp.getNodeOrigine().getY());
@@ -116,6 +111,7 @@ public class DrawableGraph extends Drawable {
             canvas.drawPath(path,paintTemp);
         }
 
+        //Puis nous finnisons par les noeuds.
         for(Node n : graph.getNodes()) {
             float tailleLbl = paintLbl.measureText(n.getLabel());
             if(n.getRayon()<tailleLbl){

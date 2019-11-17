@@ -130,12 +130,12 @@ public class MainActivity extends AppCompatActivity {
                                             if(firstNode == endNode) {
                                                 ArcFinal newArc = new ArcLoop(startingNode, label);
                                                 firstGraph.addArc(newArc);
-                                            }else{
+                                            }else {
                                                 ArcFinal newArc = new ArcFinal(startingNode, endNode, label);
-
-                                            ArcFinal newArc = new ArcFinal(startingNode,endNode,label);
+                                                firstGraph.addArc(newArc);
+                                            }
                                             if (label.length() > 0) {
-
+                                                ArcFinal newArc = new ArcFinal(startingNode, endNode, "");
                                                 firstGraph.addArc(newArc);
                                             }
                                             updateView();
@@ -250,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.sendMail:
                 Toast.makeText( this, this.getText(R.string.sendMail), Toast.LENGTH_LONG).show();
+                //Lors de l'envoie de mail il nécessaire de sauvegarder le graphe à l'intérieur de la mémoire du portable. On doit donc demander les autorisations à l'utilisateur.
                 if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                 {
                     if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) == true)
@@ -496,17 +497,8 @@ public class MainActivity extends AppCompatActivity {
         return affectedArc != null;
     }
 
+    // On compresse l'imageview sous forme de bitmap pour obtenir un png par la suite
     public void sendEmail(View view) throws IOException {
-        /*Drawable d = graph.getCurrent();
-        BitmapDrawable bitDw = ((BitmapDrawable) d);
-        Bitmap bitmap = bitDw.getBitmap();
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() ,  "graph.png");
-        FileOutputStream fOut = new FileOutputStream(file);
-
-        bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
-        fOut.flush();
-        fOut.close();
-        Uri u = Uri.fromFile(file);*/
         Bitmap bitmap;
         Drawable drawable = graph.getCurrent();
         if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
@@ -534,6 +526,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    //Les quatres prochaines fonctions sont les fonctions nécessaire pour la demande de permission.
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void askForPermission()
     {
