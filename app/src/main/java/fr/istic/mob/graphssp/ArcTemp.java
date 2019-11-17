@@ -1,5 +1,8 @@
 package fr.istic.mob.graphssp;
 
+/**
+ * @authors Arthur Poilane / Damien Salerno / Quentin Sarrazin
+ */
 public class ArcTemp extends Arc{
 
     private float nodeX,nodeY;

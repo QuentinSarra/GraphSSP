@@ -2,6 +2,9 @@ package fr.istic.mob.graphssp;
 
 import android.graphics.Color;
 
+/**
+ * @authors Arthur Poilane / Damien Salerno / Quentin Sarrazin
+ */
 public class ArcFinal extends Arc {
 
     private Node n2;

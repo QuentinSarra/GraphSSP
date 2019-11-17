@@ -16,6 +16,9 @@ import androidx.annotation.Nullable;
 import static java.lang.Math.atan;
 import static java.lang.Math.toDegrees;
 
+/**
+ * @authors Arthur Poilane / Damien Salerno / Quentin Sarrazin
+ */
 public class DrawableGraph extends Drawable {
     Graph graph;
 

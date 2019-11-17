@@ -19,24 +19,25 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
+/**
+ * @authors Arthur Poilane / Damien Salerno / Quentin Sarrazin
+ */
 public class Graph  {
 
     private ArrayList<Node> nodes;
     private ArrayList<ArcFinal> arcs;
-    private ArrayList<ArcLoop> loops;
-    private ArrayList<Arc> allArcs;
     private ArcTemp arcTemp;
 
     public Graph() {
-        nodes = new ArrayList<Node>();
-        arcs = new ArrayList<ArcFinal>();
-        allArcs = new ArrayList<Arc>();
+        nodes = new ArrayList<>();
+        arcs = new ArrayList<>();
+
 
         int height = getScreenHeight();
         int width = getScreenWidth();
         float div = (float) 1.2;
 
+        //on ajoute les noeuds par défaut
         nodes.add(new Node((float)width/2,(float)height/2,(float)(width+height)/60, Color.BLACK,"5"));
         nodes.add(new Node((float)width/2,(float)height/8,(float)(width+height)/60, Color.BLACK,"2"));
         nodes.add(new Node((float)width/2,(float)height/div,(float)(width+height)/60, Color.BLACK,"8"));
@@ -145,7 +146,6 @@ public class Graph  {
         return null;
     }
 
-    public ArrayList<ArcLoop> getArcsLoop (){return loops;};
 
     //Ces quatres fonctions ont pour but de sauvegarder les arraylist.
     @RequiresApi(api = Build.VERSION_CODES.M)

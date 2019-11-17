@@ -2,6 +2,9 @@ package fr.istic.mob.graphssp;
 
 import android.graphics.RectF;
 
+/**
+ * @authors Arthur Poilane / Damien Salerno / Quentin Sarrazin
+ */
 public class Node extends RectF{
 
 

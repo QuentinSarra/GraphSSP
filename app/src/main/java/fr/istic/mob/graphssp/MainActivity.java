@@ -38,6 +38,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * @authors Arthur Poilane / Damien Salerno / Quentin Sarrazin
+ */
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MainActivity extends AppCompatActivity {
 
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.registerForContextMenu(this.findViewById(R.id.imgView));
+        //initialisation du graphe par défaut
         if (firstGraph == null) {
             firstGraph = new Graph();
         }
@@ -74,8 +78,10 @@ public class MainActivity extends AppCompatActivity {
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                //à chaque "touch" on récupère les coordonnées de l'endroit touché
                 lastTouchDownX = event.getX();
                 lastTouchDownY = event.getY();
+                //le mode déplacement est activé
                 if (movingMode) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
@@ -100,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                             return false;
                     }
                 }
+                //le mode création d'arcs est activé
                 else if(creationArcMode){
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
@@ -166,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 if (isOnNode()) return false;
+                //le mode création de noeuds est activé
                 if (creationNodeMode) {
                     final EditText input = new EditText(MainActivity.this);
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -278,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        //création des menu contextuels dans le mode édition
         if(editMode) {
             if (this.isOnNode()) {
                 super.onCreateContextMenu(menu, v, menuInfo);
@@ -482,16 +491,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * redessine le graphe après chaque modification
+     */
     private void updateView(){
         graph = new DrawableGraph(firstGraph);
         view.setImageDrawable(graph);
     }
 
+    /**
+     *
+     * @return true si lernier click est sur un noeud
+     */
     public boolean isOnNode(){
         affectedNode = firstGraph.checkNode(lastTouchDownX,lastTouchDownY);
         return affectedNode != null;
     }
 
+    /**
+     *
+     * @return true si le dernier click est sur un arc
+     */
     public boolean isOnArc() {
         affectedArc = firstGraph.getArc(lastTouchDownX,lastTouchDownY);
         return affectedArc != null;
